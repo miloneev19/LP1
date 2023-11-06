@@ -1,0 +1,191 @@
+ALL
+
+Linear Regression 
+
+#importing necessary libraries
+import numpy as np               
+import pandas as pd              
+import seaborn as sns      
+import matplotlib.pyplot as plt
+df=pd.read_csv("/content/temperatures.csv")
+df.describe()   
+df.info()   
+df.isnull()  
+df.head() 
+df.shape 
+x=df["YEAR"]
+y=df["ANNUAL"]
+plt.plot(x,y)
+sns.scatterplot(x=x,y=y,data=df) 
+x.shape  
+type(x) 
+x= x.values     
+x=x.reshape(117,1)
+type(x)
+x.shape 
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression 
+x_train, x_test, y_train, y_test=train_test_split(x,y,test_size=0.25)
+model = LinearRegression() 
+model.fit(x_train,y_train)
+y_pred=model.predict(x_test)
+model.coef_
+model.intercept_
+plt.scatter(x_train,y_train,color="red")
+plt.plot(x_test,y_pred,color="black",linewidth="3")
+plt.title("Year vs Temp")
+plt.xlabel("Year")
+plt.ylabel("Temp")
+plt.show()
+sns.regplot(data=df,x=x_train,y=y_train)
+from sklearn.metrics import mean_squared_error, mean_absolute_error,r2_score
+print(f"MSE : {mean_squared_error(y_test,y_pred)}" )
+
+Classification 
+
+import numpy as np
+import pandas as pd 
+df=pd.red_csv("/content/Admission_Predict_Ver1.1.csv")
+df.columns
+from sklearn.preprocessing imoort Binarizer 
+bi=Binarizer(threshold=0.75)
+df['Chance of Admit ']=bi.fit_transform(df[['Chance of Admit ']])
+df
+x=df.drop('Chance of Admit ',axis=1)
+y=df['Chance of Admit ']
+y=y.astype('int')
+y
+y.value_counts()
+from sklearn.model_selection import train_test_split 
+x_train,x_test,y_train,y_test=train_test_split(x,y)
+from sklearn.tree import DecisionTreeClassifier 
+classifier=DecisionTreeClassifier(random_state=0)
+classfier.fit(x_train,y_train)
+from sklearn import tree 
+import matplotlib.pyplot as plt 
+plt.figure(figsize=(30,30))
+tree.plot_tree(classifier,filled=True, fontsize=16)
+plt.show()
+from sklearn.metrices import classification_report 
+y_pred=classifier.predict(x_test)
+print(classification_report(y_test,y_pred))
+from sklearn.metrics import ConfusionMatrixDisplay
+ConfusionMatrixDisplay.from_predictions(y_test,y_pred)
+
+Classifier Model 
+
+import numpy as np
+import pandas as pd
+df=pd.read_csv('/content/spam.csv',encoding='ISO-8859-1')
+df.head()
+df.info()
+df.groupby('v1').describe()
+df['spam'] = df['v1'].apply(lambda x:1 if x=='spam' else 0)
+df.head()
+new_df = df[['v1','v2','spam']]
+new_df.head()
+from sklearn.model_selection import train_test_split as tts
+x_train,x_test,y_train,y_test=tts(df.v2,df.spam)
+from sklearn.feature_extraction.text import CountVectorizer
+v=CountVectorizer()
+x_train_count=v.fit_transform(x_train.values)
+x_train_count.toarray()[:2]
+from sklearn.naive_bayes import MultinomialNB
+model=MultinomialNB()
+model.fit(x_train_count,y_train)
+emails=["How are you brother?", "Free entry"]
+email_count=v.transform(emails)
+model.predict(email_count)
+x_test_count=v.transform(x_test)
+model.score(x_test_count,y_test)
+
+Clustering 
+
+from sklearn.cluster import KMeans
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from matplotlib import pyplot as plt
+%matplotlib inline
+df = pd.read_csv("/content/income.csv")
+df.head()
+plt.scatter(df.Age,df['Income'])
+plt.xlabel('Age')
+plt.ylabel('Income')
+km = KMeans(n_clusters=3)
+y_predicted = km.fit_predict(df[['Age','Income']])
+y_predicted
+df['cluster']=y_predicted
+df.head()
+km.cluster_centers_
+df1 = df[df.cluster==0]
+df2 = df[df.cluster==1]
+df3 = df[df.cluster==2]
+plt.scatter(df1.Age,df1['Income'],color='green')
+plt.scatter(df2.Age,df2['Income'],color='red')
+plt.scatter(df3.Age,df3['Income'],color='black')
+plt.scatter(km.cluster_centers_[:,0],km.cluster_centers_[:,1],color='purple',marker='*',la
+plt.xlabel('Age')
+plt.ylabel('Income')
+plt.legend()
+scaler = MinMaxScaler()
+scaler.fit(df[['Income']])
+df['Income'] = scaler.transform(df[['Income']])
+scaler.fit(df[['Age']])
+df['Age'] = scaler.transform(df[['Age']])
+plt.scatter(df.Age,df['Income'])
+km = KMeans(n_clusters=3)
+y_predicted = km.fit_predict(df[['Age','Income']])
+y_predicted
+df['cluster']=y_predicted
+df.head()
+km.cluster_centers_
+df1 = df[df.cluster==0]
+df2 = df[df.cluster==1]
+df3 = df[df.cluster==2]
+plt.scatter(df1.Age,df1['Income'],color='green')
+plt.scatter(df2.Age,df2['Income'],color='red')
+plt.scatter(df3.Age,df3['Income'],color='black')
+plt.scatter(km.cluster_centers_[:,0],km.cluster_centers_[:,1],color='purple',marker='*',la
+plt.legend()
+sse = []
+k_rng = range(1,10)
+for k in k_rng:
+km = KMeans(n_clusters=k)
+km.fit(df[['Age','Income']])
+sse.append(km.inertia_) # inertia will calculate SSE
+plt.xlabel('K')
+plt.ylabel('Sum of squared error')
+plt.plot(k_rng,sse)
+
+
+Association Rule
+
+!pip install mlxtend
+import csv
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend. frequent_patterns import apriori, association_rules
+dataset = []
+with open("/content/merket.csv") as file:
+reader = csv.reader(file, delimiter=",")
+for row in reader:
+dataset.append(row)
+dataset
+te = TransactionEncoder()
+te = TransactionEncoder()
+df = pd.DataFrame(df, columns= te.columns_)
+df
+item_set = apriori(df, min_support=0.01, use_colnames=True)
+item_set
+rules= association_rules(item_set, metric="confidence", min_threshold=0.25)
+print (f" Confidence Level: 25%, No of rules: {len(rules)}")
+rules
+rules= association_rules(item_set, metric="confidence", min_threshold=0.20)
+print (f" Confidence Level: 20%, No of rules: {len(rules)}")
+rules
+rules = rules [["antecedents", "consequents", "support", "confidence"]]
+rules
+#Recommendation
+ip = "milk"
+ip = input("Enter the item to purchase : ")
+rules[rules["antecedents"] == {ip}]["consequents"]

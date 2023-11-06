@@ -1,0 +1,31 @@
+Association Rule
+
+!pip install mlxtend
+import csv
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend. frequent_patterns import apriori, association_rules
+dataset = []
+with open("/content/merket.csv") as file:
+reader = csv.reader(file, delimiter=",")
+for row in reader:
+dataset.append(row)
+dataset
+te = TransactionEncoder()
+te = TransactionEncoder()
+df = pd.DataFrame(df, columns= te.columns_)
+df
+item_set = apriori(df, min_support=0.01, use_colnames=True)
+item_set
+rules= association_rules(item_set, metric="confidence", min_threshold=0.25)
+print (f" Confidence Level: 25%, No of rules: {len(rules)}")
+rules
+rules= association_rules(item_set, metric="confidence", min_threshold=0.20)
+print (f" Confidence Level: 20%, No of rules: {len(rules)}")
+rules
+rules = rules [["antecedents", "consequents", "support", "confidence"]]
+rules
+#Recommendation
+ip = "milk"
+ip = input("Enter the item to purchase : ")
+rules[rules["antecedents"] == {ip}]["consequents"]
