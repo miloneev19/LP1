@@ -12,7 +12,7 @@ for row in reader:
 dataset.append(row)
 dataset
 te = TransactionEncoder()
-te = TransactionEncoder()
+df=te.fit_transform(dataset)
 df = pd.DataFrame(df, columns= te.columns_)
 df
 item_set = apriori(df, min_support=0.01, use_colnames=True)
